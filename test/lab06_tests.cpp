@@ -2,9 +2,9 @@
 // Created by gokay on 10/5/17.
 //
 
-#include "gtest/gtest.h"
 
 #include "../lib/lab06/inc/doubly_linked_list.h"
+#include "lib/gtest-1.7.0/fused-src/gtest/gtest.h"
 
 class Lab06_Fixture : public ::testing::Test {
 protected:

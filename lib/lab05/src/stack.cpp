@@ -65,16 +65,54 @@ namespace lab5 {
     }
 
     void stack::push(std::string &data) {
-        //step 1 store address of current top node (pointed to by head) in a node*
-        //step 2 create a new node with the incoming data variable, storing the address of this node in head pointer
-        //step 3 update new nodes next pointer with the address stored in step 1
-        //step 4 update size of stack variable
+        //create a new node and insert data
+        node *temp = new node(data);
+
+        //If the stack is empty
+        if(isEmpty())
+        {
+            //since it is empty point head to the new node
+            head = temp;
+            //since we added a node
+            size++;
+
+            return;
+        }
+            //if the stack is not empty
+        else {
+
+            //let the new node point to the first node
+            temp = head->next;
+
+            //let head then point to the newly created node
+            head = temp;
+
+            //since we added a node increment size
+            size++;
+
+            return;
     }
 
     void stack::pop() {
-        //step 1 store address of current top node (pointed to by head) in a node*
-        //step 2 update head with address of second node
-        //step 3 delete node pointed to by address stored in step 1
-        // step 4 update size of stack variable
+        node *temp;
+        //check to see if the stack is empty
+        if(isEmpty())
+        {
+            //since it is empty return an error
+            std::cout<<"Error encountered! The stack is empty"<<std::endl;
+            return;
+        }
+        else
+        {
+            //if there are items in the stack
+            //assign temp to the leading node
+            temp = head;
+            //move head to the next node so we can delete the leading node
+            head = head->next;
+            //once head is moved to the next node, we can delete the leading node
+            free(temp);
+            //decrement size since we deleted a node
+            size--;
+        }
     }
 }

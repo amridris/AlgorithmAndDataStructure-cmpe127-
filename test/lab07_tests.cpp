@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "../lib/lab07/inc/tree.h"
+#include "lib/gtest-1.7.0/fused-src/gtest/gtest.h"
 
 class TreeFixture : public ::testing::Test {
 protected:

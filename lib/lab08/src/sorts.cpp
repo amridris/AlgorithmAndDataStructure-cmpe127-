@@ -1,7 +1,8 @@
-#include "sorts.h"
+#include "../inc/sorts.h"
 
 lab6::doubly_linked_list sorts::insertion_sort(lab6::doubly_linked_list input, int iterations) {
     lab6::doubly_linked_list working_list = input;
+
     return working_list;
 }
 

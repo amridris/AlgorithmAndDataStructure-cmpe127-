@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
 #include "linked_list.h"
 
+#include "lib/gtest-1.7.0/fused-src/gtest/gtest.h"
+#include "../lib/lab04/inc/linked_list.h"
+
 
 class Lab04_Fixture : public ::testing::Test {
 protected:

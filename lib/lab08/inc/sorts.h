@@ -1,7 +1,8 @@
 #ifndef CMPE126F17_LABS_SORTS_H
 #define CMPE126F17_LABS_SORTS_H
 
-#include "doubly_linked_list.h"
+#include "../../lab06/inc/doubly_linked_list.h"
+#include <iostream>
 
 class sorts{
 public:

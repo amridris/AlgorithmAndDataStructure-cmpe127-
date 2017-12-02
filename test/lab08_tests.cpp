@@ -2,6 +2,7 @@
 
 #include "../lib/lab06/inc/doubly_linked_list.h"
 #include "../lib/lab08/inc/sorts.h"
+#include "lib/gtest-1.7.0/fused-src/gtest/gtest.h"
 
 class Lab8_Tests : public ::testing::Test {
 protected:

@@ -3,6 +3,7 @@
 #include "../lib/lab05/inc/expression.h"
 #include "../lib/lab05/inc/stack.h"
 #include "../lib/lab05/inc/queue.h"
+#include "lib/gtest-1.7.0/fused-src/gtest/gtest.h"
 
 class Lab05_Fixture : public ::testing::Test {
 public:

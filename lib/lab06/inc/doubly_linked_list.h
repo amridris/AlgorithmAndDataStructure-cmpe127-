@@ -15,7 +15,7 @@ namespace lab6 {
     public:
         doubly_linked_list();
         doubly_linked_list(unsigned input);
-        doubly_linked_list(std::vector <unsigned> values );
+        doubly_linked_list(std::vector <unsigned> values);
         doubly_linked_list(const doubly_linked_list& original);
         ~doubly_linked_list();
 

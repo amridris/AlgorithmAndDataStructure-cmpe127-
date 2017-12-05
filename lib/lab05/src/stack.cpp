@@ -69,8 +69,7 @@ namespace lab5 {
         node *temp = new node(data);
 
         //If the stack is empty
-        if(isEmpty())
-        {
+        if (isEmpty()) {
             //since it is empty point head to the new node
             head = temp;
             //since we added a node
@@ -91,28 +90,26 @@ namespace lab5 {
             size++;
 
             return;
+        }
     }
 
-    void stack::pop() {
-        node *temp;
-        //check to see if the stack is empty
-        if(isEmpty())
-        {
-            //since it is empty return an error
-            std::cout<<"Error encountered! The stack is empty"<<std::endl;
-            return;
-        }
-        else
-        {
-            //if there are items in the stack
-            //assign temp to the leading node
-            temp = head;
-            //move head to the next node so we can delete the leading node
-            head = head->next;
-            //once head is moved to the next node, we can delete the leading node
-            free(temp);
-            //decrement size since we deleted a node
-            size--;
+        void stack::pop() {
+            node *temp;
+            //check to see if the stack is empty
+            if (isEmpty()) {
+                //since it is empty return an error
+                std::cout << "Error encountered! The stack is empty" << std::endl;
+                return;
+            } else {
+                //if there are items in the stack
+                //assign temp to the leading node
+                temp = head;
+                //move head to the next node so we can delete the leading node
+                head = head->next;
+                //once head is moved to the next node, we can delete the leading node
+                free(temp);
+                //decrement size since we deleted a node
+                size--;
+            }
         }
     }
-}

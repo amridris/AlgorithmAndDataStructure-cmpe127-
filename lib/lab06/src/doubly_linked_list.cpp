@@ -32,6 +32,8 @@
  * merge frequently.
  */
 
+
+
 namespace lab6 {
 
 // Default constructor
@@ -44,17 +46,16 @@ namespace lab6 {
     }
 
 // Take in a vector of inputs and construct a doubly linked list from them
-    doubly_linked_list::doubly_linked_list(std::vector<unsigned> &values) {
+    doubly_linked_list::doubly_linked_list(std::vector<unsigned> values) {
 
         //Since this is a constructor we assume the list is always empty1
         this->head = this->tail = 0;
-        this->size = 0;
+        this->size = 1;
         unsigned int i;
         node *temp;
 
         //creating the first node for value[0]
         this->head = this->tail = temp = new node(values[0]);
-        size++;
 
         //creating the rest of the list
         for (i = 1; i < values.size(); i++) {
@@ -149,17 +150,17 @@ namespace lab6 {
 
 // return the value inside of the list located at position
     unsigned doubly_linked_list::get_data(unsigned position) {
-        int i=1;
+        int i=0;
         //create a node temp to locate the position and return the value
         node* temp;
         //set temp to point to the first node
         temp = head;
 
         //Check to see if the value is within range
-        if(position > this->size)
+        if(position >= this->size)
         {
-            std::cerr<<"Error! Value specified is out range"<<std::endl;
-            std::exit(1);
+            std::cerr<<"Error! Requesting a data which is out of range"<<std::endl<<"closing program"<<std::endl;
+            exit(0);
         }
 
         else {
@@ -176,7 +177,7 @@ namespace lab6 {
     std::vector<unsigned> doubly_linked_list::get_set(unsigned position_from, unsigned position_to) {
 
         //FYI, starting from 1 2 3 4 5 6 and not 0 1 2 3 4 5...
-        int i=1;
+        int i=0;
 
         //create a vector to save the values
         std::vector<unsigned>result;
@@ -192,7 +193,7 @@ namespace lab6 {
         }
 
         //check to see if the position_to is within the list range
-        if(position_to > this->size)
+        if(position_to >= this->size)
         {
             std::cout<<"Error encountered! location specified is out of range."<<std::endl;
             exit(1);
@@ -237,7 +238,7 @@ namespace lab6 {
     }
 
 // Merge two lists together in place, placing the input list at the end of this list
-    const doubly_linked_list doubly_linked_list::merge(doubly_linked_list rhs) {
+    void doubly_linked_list::merge(doubly_linked_list rhs) {
 
 
         //add the two sizes to get the size of the merged list
@@ -251,7 +252,6 @@ namespace lab6 {
 
         rhs.head = rhs.tail = nullptr;
 
-        return *this;
 
     }
 
@@ -298,9 +298,9 @@ namespace lab6 {
         //create a temp node pointer
         node *temp;
         temp = head;
-        int i=1;
+        int i=0;
 
-        if(position > this->size || position <= 0)
+        if(position >= this->size || position < 0)
         {
             std::cout<<"Error encountered!. The position is out of range, please enter a different value."<<std::endl;
             exit(0);
@@ -312,21 +312,39 @@ namespace lab6 {
             i++;
         }
 
-        //once temp is at the desired location
-        //create new node with data value
-        auto *newnode = new node(data);
-        //link the newnode to the node located at position & position-1.
-        newnode->next = temp;
-        newnode->prev = temp->prev;
-        //fix the linkage of node located at position
-        temp->prev = newnode;
-        //move temp backward to fix the linkage at position-1
-        temp = newnode->prev;
-        //point temp->next to the newnode
-        temp->next = newnode;
-        //update the size
-        this->size++;
+        if(position == 0)
+        {
+            temp = new node(data);
+            head->prev = temp;
+            temp->next = head;
+            head = temp;
+        }
 
+        else if(position == this->size-1)
+        {
+            temp = new node(data);
+            this->tail->next = temp;
+            temp->prev = tail;
+            tail = temp;
+        }
+
+        else {
+
+            //once temp is at the desired location
+            //create new node with data value
+            auto *newnode = new node(data);
+            //link the newnode to the node located at position & position-1.
+            newnode->next = temp;
+            newnode->prev = temp->prev;
+            //fix the linkage of node located at position
+            temp->prev = newnode;
+            //move temp backward to fix the linkage at position-1
+            temp = newnode->prev;
+            //point temp->next to the newnode
+            temp->next = newnode;
+            //update the size
+            this->size++;
+        }
 
     }
 
@@ -335,7 +353,7 @@ namespace lab6 {
         //create a temp node pointer
         node *temp, *temp1;
         temp = head;
-        int i=1;
+        int i=0;
 
         if(position >= this->size || position < 0)
         {
@@ -343,7 +361,7 @@ namespace lab6 {
             exit(0);
         }
         //move temp pointer to the desired location
-        while(i<=position)
+        while(i<position)
         {
             temp = temp->next;
             i++;
@@ -377,7 +395,7 @@ namespace lab6 {
     void doubly_linked_list::remove(unsigned position) {
         //we need to node pointers
         node *temp, *temp1;
-        int i=1;
+        int i=0;
         temp = temp1 = head;
         //traverse to the location
         while(i<position)
@@ -385,20 +403,37 @@ namespace lab6 {
             temp = temp->next;
             i++;
         }
-        //move temp1 to the node after temp
-        temp1 = temp->next;
-        //link temp1->prev1 to temp->prev, to skip the node that will be deleted
-        temp1 = temp->prev;
-        //move temp1 to the node before temp to fix the linkage
-        temp1 = temp->prev;
-        //assign temp1->next to temp->next to skip the node that will be deleted
-        temp1->next = temp->next;
-        //now that the node pointed by temp has been completed disconnected from the list, we can delete it
-        delete temp;
+        if(position == 0)
+        {
+            this->head = this->head->next;
+            this->head->prev = nullptr;
+            delete temp;
+        }
+
+        else if(position == this->size-1)
+        {
+            temp = tail;
+            this->tail = this->tail->prev;
+            this->tail->next = nullptr;
+            delete temp;
+        }
+        else
+        {
+            //move temp1 to the node after temp
+            temp1 = temp->next;
+            //link temp1->prev1 to temp->prev, to skip the node that will be deleted
+            temp1 = temp->prev;
+            //move temp1 to the node before temp to fix the linkage
+            temp1 = temp->prev;
+            //assign temp1->next to temp->next to skip the node that will be deleted
+            temp1->next = temp->next;
+            //now that the node pointed by temp has been completed disconnected from the list, we can delete it
+            delete temp;
+
+        }
 
         //update the size
         this->size--;
-
 
     }
 
@@ -407,7 +442,7 @@ namespace lab6 {
 
         //save the split list under split_list
         doubly_linked_list split_list;
-        int i=1;
+        int i=0;
 
         //create a node
         node* temp = head;
@@ -450,7 +485,7 @@ namespace lab6 {
 
         // /save the split list under split_list
         doubly_linked_list split_list;
-        int i=1;
+        int i=0;
 
         //create a node
         node* temp = head;
@@ -492,11 +527,11 @@ namespace lab6 {
     doubly_linked_list doubly_linked_list::split_set(unsigned position_from, unsigned position_to) {
 
         doubly_linked_list split_list;
-        if(position_from !=0 && position_to != size) {
+        if(position_from !=0 && position_to != size-1) {
             node *temp1, *temp2, *temp3, *temp4;
             temp1 = temp2 = this->head;
 
-            int i = 1, y = 1;
+            int i = 0, y = 0;
 
             while (i < position_from) {
                 temp1 = temp1->next;
@@ -530,11 +565,11 @@ namespace lab6 {
 
         }
 
-        else if(position_from == 1 && position_to != size)
+        else if(position_from == 1 && position_to != size-1)
         {
             node *temp,*temp1;
             temp = this->head;
-            int i=1;
+            int i=0;
             while(i<position_to)
             {
                 temp1 = temp1->next;
@@ -554,7 +589,7 @@ namespace lab6 {
         {
             node *temp,*temp1;
             temp = this->head;
-            int i=1;
+            int i=0;
             while(i<=position_from)
             {
                 temp1 = temp1->next;
@@ -580,10 +615,10 @@ namespace lab6 {
         node* temp1, *temp2, *temp3, *temp4;
         node* swap1, *swap2;
         temp1 = temp2 = head;
-        int i=1, y=1;
+        int i=0, y=0;
 
         //head swap
-        if(position1 == 1 && position2<this->get_size())
+        if(position1 == 0 && position2<this->get_size()-1)
         {
             swap1 = temp1;
             swap2 = temp1->next;
@@ -600,7 +635,7 @@ namespace lab6 {
             head = swap2;
         }
             //tail swap
-        else if(position1 > 1 && position2 == this->get_size())
+        else if(position1 > 0 && position2 == this->get_size()-1)
         {
             swap1 = tail;
             swap2 = swap1->prev;
@@ -652,7 +687,7 @@ namespace lab6 {
         temp1 = temp2 = temp3 = temp4 = head;
 
         //traverse all of the temp pointers to their respective locations
-        int i=1, y=1, a=1, c=1;
+        int i=0, y=0, a=0, c=0;
         while(i<position1_from)
         {
             temp1= temp1->next;
@@ -676,7 +711,7 @@ namespace lab6 {
             c++;
         }
 
-        if(position1_from == 1 && position2_to < this->size)
+        if(position1_from == 0 && position2_to < this->size-1)
         {
             node* temp5;
             temp5 = temp4->next;
@@ -691,7 +726,7 @@ namespace lab6 {
             this->head = temp3;
 
         }
-        else if(position2_to == size && position1_from > 1 )
+        else if(position2_to == size-1 && position1_from > 0 )
         {
             node* temp5 = temp1->prev;
 
@@ -750,19 +785,43 @@ namespace lab6 {
 // Append the rhs to the end of this list
     doubly_linked_list &doubly_linked_list::operator+=(const doubly_linked_list &RHS) {
 
+        doubly_linked_list merged;
+        node* copy, *copy2, *copy3;
+        node* merger;
+
+
         if(this->head == nullptr && this->tail == nullptr)
         {
+            this->size = RHS.size;
             *this = RHS;
         }
 
         else {
+            merged.size = RHS.size;
+            copy3 = RHS.head;
+            copy= new node(copy3->data);
+            merged.head = merged.tail = copy;
+            copy2 = copy;
+            copy3 = copy3->next;
 
+            while(copy3 != nullptr) {
+                copy->next = new node(copy3->data);
+                copy = copy->next;
+                copy->prev = copy2;
+                copy2 = copy2->next;
+                copy3 = copy3->next;
+            }
+            merged.tail = copy;
+            merger = merged.head;
+            this->tail->next = merger;
+            merger->prev = this->tail;
+            this->tail = merged.tail;
+            merged.head = merged.tail = nullptr;
+            this->size = this->size+merged.size;
 
-            this->size += RHS.size;
-            this->tail->next = RHS.head;
-            RHS.head->prev = this->tail;
-            this->tail = RHS.tail;
         }
+
+
         return *this;
     }
 
@@ -773,7 +832,6 @@ namespace lab6 {
     bool doubly_linked_list::is_empty() {
         return !size;
     }
-
 
     bool doubly_linked_list::operator==(const doubly_linked_list &rhs) const {
         node * iterL=head, * iterR = rhs.head;
